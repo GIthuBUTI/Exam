@@ -16,7 +16,10 @@ def compute_daily_max_difference(time_series):
         if item[0] < day_end[n]: # lista temperature in una giornata 
             list_t.append(item[1])
         else:
-            max_difference.append(round((max(list_t) - min(list_t)),1)) 
+            if len(list_t) > 1:
+                max_difference.append(round((max(list_t) - min(list_t)),1))
+            else:
+                max_difference.append(None)
             n = n + 1
             list_t =[]
     
@@ -27,17 +30,14 @@ class CSVFile():
     
     def __init__(self, name):  
         self.name = name
-        
-    def __str__(self):
-        return '{}'.format(self.name)
-        
+                
     def get_data(self):
         #verifico che il file esista
         try:
             my_file = open(self.name, 'r')
         #se il file non esiste stampo l'errore
         except Exception as e:
-            print('Non esiste alcun file con quel nome, ho ricevuto questo errore: {}'.format(e))
+            print('File inesistente, errore: {}'.format(e))
             exit()
         #creo lista vuota
         list = []
