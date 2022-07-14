@@ -72,11 +72,11 @@ def compute_daily_max_difference(time_series):
                 else:
                     max_difference.append(None)
 
-        '''
-        Se l'epoch è uguale all'inizio del' giorno successivo, 
-        come ho fatto in precedenza, verifico la lunghezza di 't_list'
-        e di conseguenza aggiungo il valore dell'escursione termica giornaliera.
-        '''
+            '''
+            Se l'epoch è uguale all'inizio del' giorno successivo, 
+            come ho fatto in precedenza, verifico la lunghezza di 't_list'
+            e di conseguenza aggiungo il valore dell'escursione termica giornaliera.
+            '''
         
         else:
             if len(t_list) > 1:
@@ -182,14 +182,14 @@ class CSVTimeSeriesFile():
                     items[0] = int(items[0])
                     
                 except ValueError as e:
-                    print(f'Errore: {e}')
+                    print(f"Errore nel convertire l'epoch in intero: {e}")
                     continue
 
                 try:
                     items[1] = float(items[1])
                     
                 except ValueError as e:
-                    print(f'Errore: {e}')
+                    print(f"Errore nel convertire la temperatura in floating point: {e}")
                     continue
 
                 '''
@@ -237,5 +237,4 @@ class CSVTimeSeriesFile():
 time_series_file = CSVTimeSeriesFile(name='data.csv')
 time_series = time_series_file.get_data()
 
-print(time_series)
 print(compute_daily_max_difference(time_series))
