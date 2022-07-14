@@ -181,15 +181,13 @@ class CSVTimeSeriesFile():
                 try:
                     items[0] = int(items[0])
                     
-                except ValueError as e:
-                    print(f"Errore nel convertire l'epoch in intero: {e}")
+                except ValueError:
                     continue
 
                 try:
                     items[1] = float(items[1])
                     
-                except ValueError as e:
-                    print(f"Errore nel convertire la temperatura in floating point: {e}")
+                except ValueError:
                     continue
 
                 '''
@@ -236,5 +234,3 @@ class CSVTimeSeriesFile():
 
 time_series_file = CSVTimeSeriesFile(name='data.csv')
 time_series = time_series_file.get_data()
-
-print(compute_daily_max_difference(time_series))
