@@ -84,7 +84,7 @@ def compute_daily_max_difference(time_series):
             
             else:
                 max_difference.append(None)
-
+                
             '''
             Incremento la variabile 'n' per aggiornare 'day_start'
             e svuoto la lista di temperature giornaliere.
@@ -173,20 +173,17 @@ class CSVTimeSeriesFile():
 
                 '''
                 Verifico che il primo elemento di 'items', l'epoch,
-                sia convertibile a intero.
+                sia convertibile a intero,
+                il secondo elemento di 'items', la temperatura,
+                sia convertibile a floating point.
                 In caso contrario gestisco l'errore e continuo.
                 '''
                 try:
                     items[0] = int(items[0])
                     
-                except ValueError:
+                except ValueError as e:
+                    print(f'Errore: {e}')
                     continue
-
-                '''
-                Verifico che il secondo elemento di 'items', la temperatura,
-                sia convertibile a floating point.
-                In caso contrario gestisco l'errore e continuo.
-                '''
 
                 try:
                     items[1] = float(items[1])
@@ -194,28 +191,51 @@ class CSVTimeSeriesFile():
                 except ValueError as e:
                     print(f'Errore: {e}')
                     continue
-                    
+
+                '''
+                Verifico che gli epoch siano ordinati cronologicamente
+                e che non vi siano valori doppi.
+                In caso contrario, alzo un eccezione.
+                '''
+                
                 if pv_epoch > items[0]:
-                    raise ExamException("\nValori non ordinati.\n")
+                    raise ExamException("\nEpoch non ordinati cronologicamente.\n")
                     
                 if pv_epoch == items[0]:
-                    raise ExamException("\nValore duplicato.\n")
-                
+                    raise ExamException("\nEpoch duplicati.\n")
+
+                '''
+                Se la lista 'items' rispetta tutti i parametri,
+                la aggiungo alla lista 'obs'.
+                '''
                 obs.append(items)
+
+                ''' 
+                Aggiorno la variabile 'pv_epoch'
+                per continuare a verificare l'ordine degli epoch.
+                '''
                 
                 pv_epoch = items[0]
-                #aggiungo l'elememto modificato a list
-            
-        #chiudo il file
+
+        '''
+        Chiudo il file dopo aver concluso la lista 'obs'.
+        '''
+        
         my_file.close()
+
+        '''
+        Se la lista 'obs' non contiene elementi,
+        alzo l'eccezione.
+        '''
+        
         if obs == []:
             raise ExamException("\nIl file è vuoto o i dati sono scritti in modo errato.\n")
          
-    
         return obs
+
 
 time_series_file = CSVTimeSeriesFile(name='data.csv')
 time_series = time_series_file.get_data()
 
-#print(time_series)
+print(time_series)
 print(compute_daily_max_difference(time_series))
